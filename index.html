@@ -1,1 +1,969 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATOTSKIE NAKAMICHI | $SATOT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0B0B0B;
+    --primary: #f8db27;
+    --accent: #f8db27;
+    --white: #FFFFFF;
+    --muted: #A1A1A1;
+    --glow: 0 0 20px #f8db2766, 0 0 60px #f8db2733;
+    --glow-strong: 0 0 30px #f8db27AA, 0 0 80px #f8db2755, 0 0 120px #f8db2722;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ============ CANVAS BACKGROUND ============ */
+  #bg-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ============ NAV ============ */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 40px;
+    background: rgba(11,11,11,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(248,219,39,0.12);
+  }
+
+  .nav-logo {
+    font-family: 'Bangers', cursive;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    color: var(--primary);
+    text-shadow: var(--glow);
+    cursor: pointer;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 8px;
+  }
+
+  .nav-link {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    background: none;
+    border: 1px solid rgba(248,219,39,0.2);
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .nav-link:hover, .nav-link.active {
+    color: var(--primary);
+    border-color: var(--primary);
+    box-shadow: var(--glow);
+    background: rgba(248,219,39,0.05);
+  }
+
+  /* ============ PAGES ============ */
+  .page {
+    display: none;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+  .page.active { display: flex; flex-direction: column; }
+
+  /* ============ LANDING PAGE ============ */
+  #page-home {
+    align-items: center;
+    justify-content: center;
+    padding: 100px 20px 80px;
+  }
+
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---- COIN LOGO ---- */
+  .coin-wrapper {
+    position: relative;
+    margin-bottom: 32px;
+    animation: floatY 4s ease-in-out infinite;
+  }
+
+  @keyframes floatY {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-14px); }
+  }
+
+  .coin-ring {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #f8db27, #f8db27, #f8db27);
+    padding: 5px;
+    box-shadow: var(--glow-strong), inset 0 0 20px rgba(0,0,0,0.4);
+    position: relative;
+  }
+
+  .coin-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #1a1200, #0B0B0B);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* SVG Character */
+  .coin-char {
+    width: 130px;
+    height: 130px;
+  }
+
+  .coin-spin-ring {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 2px dashed rgba(248,219,39,0.3);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: spin 12s linear infinite;
+  }
+
+  .coin-spin-ring2 {
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    border: 1px solid rgba(248,219,39,0.1);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: spin 18s linear infinite reverse;
+  }
+
+  @keyframes spin { from { transform: translate(-50%,-50%) rotate(0deg); } to { transform: translate(-50%,-50%) rotate(360deg); } }
+
+  /* ---- MAIN TITLE ---- */
+  .coin-name {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(3rem, 9vw, 6.5rem);
+    letter-spacing: 4px;
+    color: var(--white);
+    line-height: 0.95;
+    margin-bottom: 16px;
+    text-shadow: 0 0 40px rgba(248,219,39,0.25);
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+
+  .coin-name span {
+    color: var(--primary);
+    text-shadow: var(--glow-strong);
+  }
+
+  /* ---- TICKER ---- */
+  .ticker-badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem;
+    color: var(--bg);
+    background: var(--primary);
+    padding: 6px 24px;
+    border-radius: 3px;
+    letter-spacing: 4px;
+    font-weight: 700;
+    margin-bottom: 28px;
+    box-shadow: var(--glow);
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  /* ---- CA ---- */
+  .ca-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(248,219,39,0.06);
+    border: 1px solid rgba(248,219,39,0.2);
+    border-radius: 8px;
+    padding: 12px 20px;
+    margin-bottom: 28px;
+    max-width: 500px;
+    width: 100%;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .ca-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--primary);
+    letter-spacing: 2px;
+    white-space: nowrap;
+  }
+
+  .ca-addr {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .copy-btn {
+    background: rgba(248,219,39,0.1);
+    border: 1px solid rgba(248,219,39,0.3);
+    color: var(--primary);
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+    letter-spacing: 1px;
+  }
+  .copy-btn:hover {
+    background: var(--primary);
+    color: var(--bg);
+    box-shadow: var(--glow);
+  }
+  .copy-btn.copied {
+    background: #00ff88;
+    border-color: #00ff88;
+    color: #0B0B0B;
+  }
+
+  /* ---- TAGLINE ---- */
+  .tagline {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    color: var(--primary);
+    letter-spacing: 3px;
+    text-shadow: var(--glow);
+    margin-bottom: 8px;
+    animation: fadeUp 0.8s 0.35s ease both;
+  }
+
+  .subtext {
+    font-size: 0.95rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 40px;
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+
+  /* ---- ORIGIN BLURB ---- */
+  .origin-blurb {
+    max-width: 480px;
+    text-align: center;
+    margin-bottom: 36px;
+    padding: 18px 24px;
+    border: 1px solid rgba(248,219,39,0.15);
+    border-radius: 10px;
+    background: rgba(248,219,39,0.04);
+    animation: fadeUp 0.8s 0.45s ease both;
+  }
+
+  .origin-line {
+    font-size: 0.97rem;
+    color: var(--white);
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+
+  .origin-line span {
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  .origin-chaos {
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ---- BUTTONS ---- */
+  .btn-group {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeUp 0.8s 0.5s ease both;
+  }
+
+  .btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .btn:hover::before { opacity: 1; }
+
+  .btn-primary {
+    background: var(--primary);
+    color: var(--bg);
+    border: 2px solid var(--primary);
+  }
+  .btn-primary:hover {
+    box-shadow: var(--glow-strong);
+    transform: translateY(-2px);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid rgba(248,219,39,0.4);
+  }
+  .btn-outline:hover {
+    border-color: var(--primary);
+    box-shadow: var(--glow);
+    background: rgba(248,219,39,0.07);
+    transform: translateY(-2px);
+  }
+
+  /* ============ ABOUT PAGE ============ */
+  #page-about {
+    padding: 110px 20px 80px;
+    align-items: center;
+  }
+
+  .about-container {
+    max-width: 780px;
+    width: 100%;
+    margin: 0 auto;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .about-header {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+
+  .about-title {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    color: var(--white);
+    letter-spacing: 3px;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  .about-title span { color: var(--primary); text-shadow: var(--glow); }
+
+  .about-subtitle-line {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--primary);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 5px 20px;
+    border: 1px solid rgba(248,219,39,0.3);
+    border-radius: 20px;
+  }
+
+  /* Meme card */
+  .meme-card {
+    background: rgba(248,219,39,0.04);
+    border: 1px solid rgba(248,219,39,0.15);
+    border-radius: 16px;
+    padding: 36px 40px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .meme-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    opacity: 0.5;
+  }
+
+  .origin-text {
+    font-size: 1.05rem;
+    color: var(--white);
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+
+  .origin-text em {
+    color: var(--primary);
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  .chaos-text {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.6;
+    font-style: italic;
+    margin-bottom: 0;
+  }
+
+  /* Traits list */
+  .traits-card {
+    background: rgba(248,219,39,0.04);
+    border: 1px solid rgba(248,219,39,0.15);
+    border-radius: 16px;
+    padding: 36px 40px;
+    margin-bottom: 24px;
+  }
+
+  .traits-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--primary);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .traits-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(248,219,39,0.2);
+  }
+
+  .trait-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: all 0.3s;
+  }
+  .trait-item:last-child { border-bottom: none; }
+  .trait-item:hover { padding-left: 6px; }
+
+  .trait-emoji {
+    font-size: 1.6rem;
+    min-width: 36px;
+    line-height: 1;
+    filter: drop-shadow(0 0 8px rgba(248,219,39,0.4));
+  }
+
+  .trait-text {
+    font-size: 0.95rem;
+    color: var(--white);
+    line-height: 1.5;
+    padding-top: 2px;
+  }
+
+  /* Bold tagline */
+  .bold-tagline {
+    text-align: center;
+    font-family: 'Bangers', cursive;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    letter-spacing: 4px;
+    color: var(--primary);
+    text-shadow: var(--glow-strong);
+    padding: 20px 0;
+    margin-bottom: 24px;
+    animation: pulseGlow 3s ease-in-out infinite;
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { text-shadow: var(--glow); }
+    50% { text-shadow: var(--glow-strong); }
+  }
+
+  /* disclaimer cards */
+  .disclaimer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 560px) {
+    .disclaimer-grid { grid-template-columns: 1fr; }
+  }
+
+  .disc-card {
+    background: rgba(248,219,39,0.04);
+    border: 1px solid rgba(248,219,39,0.12);
+    border-radius: 12px;
+    padding: 20px 22px;
+    text-align: center;
+  }
+
+  .disc-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .disc-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--primary);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .disc-text {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* final line */
+  .final-line {
+    background: linear-gradient(135deg, rgba(248,219,39,0.08), rgba(248,219,39,0.05));
+    border: 1px solid rgba(248,219,39,0.2);
+    border-radius: 12px;
+    padding: 24px 32px;
+    text-align: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--white);
+    line-height: 1.7;
+  }
+
+  .final-line strong {
+    color: var(--primary);
+    font-size: 1rem;
+  }
+
+  /* ============ FOOTER ============ */
+  footer {
+    position: relative;
+    z-index: 2;
+    border-top: 1px solid rgba(248,219,39,0.1);
+    padding: 32px 40px;
+    text-align: center;
+    background: rgba(11,11,11,0.9);
+  }
+
+  .footer-vibe {
+    font-family: 'Bangers', cursive;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 18px;
+  }
+
+  .footer-vibe span { color: var(--primary); }
+
+  .footer-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+
+  .social-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--muted);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 8px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+  }
+
+  .social-btn:hover {
+    color: var(--primary);
+    border-color: rgba(248,219,39,0.4);
+    box-shadow: 0 0 15px rgba(248,219,39,0.15);
+  }
+
+  .footer-ca {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: rgba(161,161,161,0.5);
+    letter-spacing: 1px;
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 600px) {
+    nav { padding: 14px 20px; }
+    .nav-logo { font-size: 1.2rem; }
+    .btn { padding: 12px 18px; font-size: 0.75rem; }
+    .meme-card, .traits-card { padding: 24px 22px; }
+    footer { padding: 28px 20px; }
+    .coin-ring { width: 150px; height: 150px; }
+    .coin-spin-ring { width: 170px; height: 170px; }
+    .coin-spin-ring2 { width: 190px; height: 190px; }
+  }
+
+  /* noise overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.4;
+  }
+
+  /* scroll bar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: rgba(248,219,39,0.3); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">$SATOT</div>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="showPage('home')">Home</button>
+    <button class="nav-link" onclick="showPage('about')">About</button>
+  </div>
+</nav>
+
+<!-- ===== LANDING PAGE ===== -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <!-- COIN -->
+    <div class="coin-wrapper">
+      <div class="coin-spin-ring2"></div>
+      <div class="coin-spin-ring"></div>
+      <div class="coin-ring">
+        <div class="coin-inner">
+          <img src="satot.png" class="coin-char" alt="Satotskie Nakamichi"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- NAME -->
+    <h1 class="coin-name">SATOTSKIE<br><span>NAKAMICHI</span></h1>
+
+    <!-- TICKER -->
+    <div class="ticker-badge">$SATOT</div>
+
+    <!-- CA -->
+    <div class="ca-box">
+      <span class="ca-label">CA:</span>
+      <span class="ca-addr" id="ca-text">0x23232etccccc1f4b9d8e2a7c3f6b1e9d4c7a2f5b8e</span>
+      <button class="copy-btn" id="copy-btn" onclick="copyCA()">COPY</button>
+    </div>
+
+    <!-- TAGLINE -->
+    <div class="tagline">Weird. Broke. Bullish.</div>
+    <p class="subtext">"Thinks every dip is the last dip."</p>
+
+    <!-- ORIGIN BLURB -->
+    <div class="origin-blurb">
+      <p class="origin-line">He tried to become <span>Satoshi Nakamoto</span>… but became <span>Satotskie Nakamichi</span> instead.</p>
+      <p class="origin-chaos">Something went wrong. Or right. Nobody knows.</p>
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="btn-group">
+      <a href="#" class="btn btn-primary">🚀 Buy on Pump.fun</a>
+      <a href="#" class="btn btn-outline">📊 View Chart</a>
+      <a href="#" class="btn btn-outline">✈️ Join Telegram</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-vibe">Built on <span>vibes</span>, not fundamentals.</div>
+    <div class="footer-social">
+      <a href="#" class="social-btn">✈️ Telegram</a>
+      <a href="#" class="social-btn">𝕏 Twitter</a>
+    </div>
+    <div class="footer-ca">CA: 0x23232etccccc1f4b9d8e2a7c3f6b1e9d4c7a2f5b8e</div>
+  </footer>
+</div>
+
+<!-- ===== ABOUT PAGE ===== -->
+<div class="page" id="page-about">
+  <div class="about-container">
+
+    <div class="about-header">
+      <h1 class="about-title">Who is<br><span>Satotskie Nakamichi?</span></h1>
+      <span class="about-subtitle-line">Origin Story (Kind Of)</span>
+    </div>
+
+    <!-- Origin -->
+    <div class="meme-card">
+      <p class="origin-text">
+        His portfolio is 97% red.<br>
+        He calls it <em>"unrealized gains."</em>
+      </p>
+      <p class="chaos-text">His therapist quit. His wallet cried. He bought more.</p>
+    </div>
+
+    <!-- Traits -->
+    <div class="traits-card">
+      <div class="traits-label">Personality Traits</div>
+      <div class="trait-item">
+        <span class="trait-emoji">🧠</span>
+        <span class="trait-text">Trades with 0.01 braincells</span>
+      </div>
+      <div class="trait-item">
+        <span class="trait-emoji">📈</span>
+        <span class="trait-text">Buys every green candle like it's destiny</span>
+      </div>
+      <div class="trait-item">
+        <span class="trait-emoji">🫠</span>
+        <span class="trait-text">Thinks every dip is "the last dip"</span>
+      </div>
+      <div class="trait-item">
+        <span class="trait-emoji">🤡</span>
+        <span class="trait-text">Calls every crash a "healthy correction"</span>
+      </div>
+      <div class="trait-item">
+        <span class="trait-emoji">🍿</span>
+        <span class="trait-text">Watches charts like it's Netflix</span>
+      </div>
+    </div>
+
+    <!-- BOLD TAGLINE -->
+    <div class="bold-tagline">Weird. Broke. Bullish.</div>
+
+    <!-- Grid -->
+    <div class="disclaimer-grid">
+      <div class="disc-card">
+        <span class="disc-icon">🗺️</span>
+        <div class="disc-title">Roadmap</div>
+        <div class="disc-text">None. The road is the map.</div>
+      </div>
+      <div class="disc-card">
+        <span class="disc-icon">⚙️</span>
+        <div class="disc-title">Utility</div>
+        <div class="disc-text">Emotional damage. That's it.</div>
+      </div>
+      <div class="disc-card">
+        <span class="disc-icon">🧮</span>
+        <div class="disc-title">Logic</div>
+        <div class="disc-text">Error 404. Logic not found.</div>
+      </div>
+      <div class="disc-card">
+        <span class="disc-icon">✨</span>
+        <div class="disc-title">Vibe</div>
+        <div class="disc-text">Pure meme energy. Undefeated.</div>
+      </div>
+    </div>
+
+    <!-- Final -->
+    <div class="final-line">
+      He doesn't understand the market…<br>
+      <strong>but the market somehow listens to him.</strong><br><br>
+      No roadmap. No utility. No logic.<br>
+      Just pure meme energy and bad financial decisions.<br><br>
+      <strong>This is not a project.<br>This is a financial personality disorder.</strong>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-vibe">Built on <span>vibes</span>, not fundamentals.</div>
+    <div class="footer-social">
+      <a href="#" class="social-btn">✈️ Telegram</a>
+      <a href="#" class="social-btn">𝕏 Twitter</a>
+    </div>
+    <div class="footer-ca">CA: 0x23232etccccc1f4b9d8e2a7c3f6b1e9d4c7a2f5b8e</div>
+  </footer>
+</div>
+
+<script>
+// ============ PAGE NAVIGATION ============
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-link')[id === 'home' ? 0 : 1].classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ============ COPY CA ============
+function copyCA() {
+  const ca = document.getElementById('ca-text').textContent;
+  navigator.clipboard.writeText(ca).catch(() => {});
+  const btn = document.getElementById('copy-btn');
+  btn.textContent = '✓ COPIED';
+  btn.classList.add('copied');
+  setTimeout(() => {
+    btn.textContent = 'COPY';
+    btn.classList.remove('copied');
+  }, 2000);
+}
+
+// ============ ANIMATED BACKGROUND ============
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Particle types
+const particles = [];
+const types = ['coin', 'rocket', 'candle', 'dot'];
+
+class Particle {
+  constructor() { this.reset(true); }
+  reset(init = false) {
+    this.x = Math.random() * canvas.width;
+    this.y = init ? Math.random() * canvas.height : canvas.height + 60;
+    this.type = types[Math.floor(Math.random() * types.length)];
+    this.size = Math.random() * 14 + 8;
+    this.speed = Math.random() * 0.6 + 0.2;
+    this.opacity = Math.random() * 0.18 + 0.04;
+    this.drift = (Math.random() - 0.5) * 0.4;
+    this.rot = Math.random() * Math.PI * 2;
+    this.rotSpeed = (Math.random() - 0.5) * 0.02;
+    this.pulse = Math.random() * Math.PI * 2;
+  }
+  update() {
+    this.y -= this.speed;
+    this.x += this.drift;
+    this.rot += this.rotSpeed;
+    this.pulse += 0.02;
+    if (this.y < -80) this.reset();
+  }
+  draw() {
+    ctx.save();
+    ctx.globalAlpha = this.opacity + Math.sin(this.pulse) * 0.02;
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rot);
+    ctx.strokeStyle = '#f8db27';
+    ctx.fillStyle = 'rgba(248,219,39,0.15)';
+    ctx.lineWidth = 1;
+    const s = this.size;
+
+    if (this.type === 'coin') {
+      ctx.beginPath();
+      ctx.arc(0, 0, s, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(0, 0, s * 0.6, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.font = `bold ${s * 0.7}px Arial`;
+      ctx.fillStyle = 'rgba(248,219,39,0.3)';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('$', 0, 0);
+    } else if (this.type === 'rocket') {
+      ctx.beginPath();
+      ctx.moveTo(0, -s);
+      ctx.lineTo(s * 0.4, s * 0.4);
+      ctx.lineTo(-s * 0.4, s * 0.4);
+      ctx.closePath();
+      ctx.stroke();
+    } else if (this.type === 'candle') {
+      const h = s * 1.5;
+      ctx.strokeRect(-s * 0.25, -h * 0.5, s * 0.5, h * 0.7);
+      ctx.beginPath();
+      ctx.moveTo(0, -h * 0.5);
+      ctx.lineTo(0, -h);
+      ctx.moveTo(0, h * 0.2);
+      ctx.lineTo(0, h * 0.5);
+      ctx.stroke();
+    } else {
+      ctx.beginPath();
+      ctx.arc(0, 0, s * 0.25, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(248,219,39,0.25)';
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+}
+
+for (let i = 0; i < 40; i++) particles.push(new Particle());
+
+function drawGrid() {
+  ctx.strokeStyle = 'rgba(248,219,39,0.025)';
+  ctx.lineWidth = 1;
+  const spacing = 80;
+  for (let x = 0; x < canvas.width; x += spacing) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+  }
+  for (let y = 0; y < canvas.height; y += spacing) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawGrid();
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+</body>
+</html>
